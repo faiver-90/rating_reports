@@ -1,6 +1,9 @@
 import argparse
+import logging
 
 from src.reports.register_reports import register
+
+logger = logging.getLogger(__name__)
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
@@ -24,6 +27,6 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     known, unknown = p.parse_known_args(argv)
 
     if unknown:
-        print(f"[WARN] Ignoring unknown args: {' '.join(unknown)}")
+        logger.error(f"Ignoring unknown args: {' '.join(unknown)}")
 
     return known

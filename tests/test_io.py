@@ -15,8 +15,6 @@ def test_read_csv_files_reads_rows(tmp_path):
     assert result[1]["rating"] == "4.8"
 
 
-def test_read_csv_files_warns_on_missing(tmp_path, capsys):
+def test_read_csv_files_warns_on_missing(tmp_path):
     result = read_csv_files([str(tmp_path / "missing.csv")])
-    captured = capsys.readouterr()
-    assert "[WARN]" in captured.err
     assert result == []

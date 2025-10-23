@@ -1,7 +1,9 @@
 import csv
-import sys
+import logging
 from collections.abc import Iterable
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 def _open_text(p: Path, mode: str = "r", encoding="utf-8"):
@@ -10,11 +12,10 @@ def _open_text(p: Path, mode: str = "r", encoding="utf-8"):
 
 def read_csv_files(files: Iterable[str], delimiter: str = ","):
     rows: list[dict] = []
-
     for f_name in files:
         path = Path(f_name)
         if not path.exists():
-            print(f"[WARN] file not found: {path}", file=sys.stderr)
+            logger.error(f"File not found: {path}")
             continue
         try:
             with _open_text(path, "r", "utf-8") as f:
@@ -24,12 +25,12 @@ def read_csv_files(files: Iterable[str], delimiter: str = ","):
                         continue
                     rows.append(row)
         except FileNotFoundError:
-            print(f"[WARN] file not found: {path}", file=sys.stderr)
+            logger.error(f"File not found: {path}")
         except PermissionError as e:
-            print(f"[WARN] no permission {path}: {e}", file=sys.stderr)
+            logger.error(f"No permission {path}: {e}")
         except UnicodeDecodeError as e:
-            print(f"[WARN] bad encoding {path}: {e}", file=sys.stderr)
+            logger.error(f"Bad encoding {path}: {e}")
         except csv.Error as e:
-            print(f"[WARN] bad CSV {path}: {e}", file=sys.stderr)
+            logger.error(f"Bad CSV {path}: {e}")
 
     return rows

@@ -1,6 +1,8 @@
-import sys
+import logging
 from collections import defaultdict
 
+
+logger = logging.getLogger(__name__)
 
 def average_rating(rows):
     if rows is None:
@@ -15,10 +17,10 @@ def average_rating(rows):
             brand = row["brand"]
             rating = float(row["rating"])
         except KeyError as e:
-            print(f"[WARN] missing key {e} at row {idx}", file=sys.stderr)
+            logger.error(f"[WARN] missing key {e} at row {idx}")
             continue
         except (TypeError, ValueError):
-            print(f"[WARN] bad rating at row {idx}: {row.get('rating')!r}", file=sys.stderr)
+            logger.error(f"[WARN] bad rating at row {idx}: {row.get('rating')!r}")
             continue
 
         sums[brand] += rating

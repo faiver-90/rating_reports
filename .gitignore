@@ -1,3 +1,4 @@
+logs/
 # Файлы окружения
 .env
 .env.*          # .env.dev, .env.prod и т.п.
