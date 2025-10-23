@@ -33,8 +33,9 @@ def test_average_rating_skips_bad_rows(caplog):
     caplog.set_level("ERROR")
     rows = [
         {"brand": "a", "rating": "5"},
-        {"brand": "b", "rating": "x"},  # плохой рейтинг
-        {"rating": "4.5"},  # нет brand
+        {"brand": "b", "rating": "x"},
+        {"rating": "4.5"},
     ]
     res = average_rating(rows)
+    print(caplog.records)
     assert ("a", 5.0) in res and all("WARN" in r.message for r in caplog.records)

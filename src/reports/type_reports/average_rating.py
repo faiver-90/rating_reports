@@ -17,10 +17,10 @@ def average_rating(rows: List[Dict[str, str]]) -> List[tuple] | None:
             brand = row["brand"]
             rating = float(row["rating"])
         except KeyError as e:
-            logger.error(f"Missing key {e} at row {idx}")
+            logger.warning(f"Missing key {e} at row {idx}")
             continue
         except (TypeError, ValueError):
-            logger.error(f"Bad rating at row {idx}: {row.get('rating')!r}")
+            logger.warning(f"Bad rating at row {idx}: {row.get('rating')!r}")
             continue
 
         sums[brand] += rating
