@@ -47,10 +47,6 @@ docstring-code-format = true
 skip-magic-trailing-comma = false
 line-ending = "auto"
 
-[tool.black]
-line-length = 88
-target-version = ["py311"]
-
 [dependency-groups]
 dev = [
     "ruff (>=0.14.1,<0.15.0)"

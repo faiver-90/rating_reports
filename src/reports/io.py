@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 def _open_text(p: Path, mode: str = "r", encoding="utf-8"):
     return p.open(mode, encoding=encoding, newline="")
 
-
 def read_csv_files(files: Iterable[str], delimiter: str = ","):
     rows: list[dict] = []
     for f_name in files:
@@ -23,6 +22,9 @@ def read_csv_files(files: Iterable[str], delimiter: str = ","):
                 for row in reader:
                     if not row:
                         continue
+                    if any(v is None for v in row.values()):
+                        logger.error(f"Bad CSV {path}: inconsistent columns")
+                        return []  # весь файл считаем битым
                     rows.append(row)
         except FileNotFoundError:
             logger.error(f"File not found: {path}")

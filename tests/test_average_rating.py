@@ -19,3 +19,22 @@ def test_average_rating_computes_correctly():
 
 def test_average_rating_empty_input():
     assert average_rating.average_rating([]) == []
+
+
+def test_average_rating_none():
+    from src.reports.type_reports.average_rating import average_rating
+
+    assert average_rating(None) is None
+
+
+def test_average_rating_skips_bad_rows(caplog):
+    from src.reports.type_reports.average_rating import average_rating
+
+    caplog.set_level("ERROR")
+    rows = [
+        {"brand": "a", "rating": "5"},
+        {"brand": "b", "rating": "x"},  # плохой рейтинг
+        {"rating": "4.5"},  # нет brand
+    ]
+    res = average_rating(rows)
+    assert ("a", 5.0) in res and all("WARN" in r.message for r in caplog.records)

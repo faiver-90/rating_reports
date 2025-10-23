@@ -5,8 +5,15 @@ from pathlib import Path
 def setup_logger():
     Path("logs").mkdir(parents=True, exist_ok=True)
 
-    logger = logging.getLogger()
-    logger.setLevel(logging.ERROR)
+    root = logging.getLogger()
+    root.setLevel(logging.ERROR)
+
+    for h in list(root.handlers):
+        root.removeHandler(h)
+        try:
+            h.close()
+        except Exception:
+            pass
 
     fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
@@ -16,5 +23,6 @@ def setup_logger():
     ch = logging.StreamHandler()
     ch.setFormatter(fmt)
 
-    logger.addHandler(fh)
-    logger.addHandler(ch)
+    root.addHandler(fh)
+    root.addHandler(ch)
+    root.propagate = False

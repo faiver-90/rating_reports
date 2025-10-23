@@ -9,6 +9,15 @@ def test_parse_args_includes_registered_reports(capsys):
         assert "average-rating" in out
 
 
+def test_parse_args_unknown_logged(caplog):
+    from src.parse_args import parse_args
+
+    caplog.set_level("ERROR")
+    ns = parse_args(["--report", "average-rating", "--files", "a.csv", "--x"])
+    assert "Ignoring unknown args" in caplog.text
+    assert ns.report == "average-rating"
+
+
 def test_main_executes_with_mocked_funcs(tmp_path, capsys):
     csv_path = tmp_path / "a.csv"
     csv_path.write_text(
