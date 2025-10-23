@@ -12,17 +12,17 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     p = argparse.ArgumentParser(
         prog="ratings",
         description=(
-            "Агрегация рейтингов и формирование отчётов из CSV.\n"
-            "Доступные отчеты:\n"
+            "Rating aggregation and report generation from CSV.\n"
+            "Available reports:\n"
             f"{reports_list}"
         ),
     )
-    p.add_argument("--files", nargs="+", required=True, help="Пути к CSV-файлам.")
+    p.add_argument("--files", nargs="+", required=True, help="Paths to CSV files.")
     p.add_argument(
         "--report",
         required=True,
         choices=list(register.keys()),
-        help="Название отчёта.",
+        help="Report Title.",
     )
     known, unknown = p.parse_known_args(argv)
 
