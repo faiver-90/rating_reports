@@ -1,4 +1,4 @@
-from src.script import register_reports
+from src.reports import register_reports
 
 
 def test_register_reports_structure():

@@ -1,4 +1,4 @@
-from src.script.io import read_csv_files
+from src.reports.io import read_csv_files
 
 CSV_SAMPLE = """name,brand,price,rating
 iphone 15 pro,apple,999,4.9

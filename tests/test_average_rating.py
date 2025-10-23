@@ -1,4 +1,4 @@
-from src.script.type_reports import average_rating
+from src.reports.type_reports import average_rating
 
 
 def test_average_rating_computes_correctly():

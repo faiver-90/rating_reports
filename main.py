@@ -1,43 +1,49 @@
-import argparse
 import sys
 
 import tabulate
 
-from src.script.io import read_csv_files
-from src.script.register_reports import register
+from src.parse_args import parse_args
+from src.reports.io import read_csv_files
+from src.reports.register_reports import register
 
 
-def parse_args(argv: list[str]) -> argparse.Namespace:
-    reports_list = "\n".join(f"  {name}" for name in register.items())
+def main(argv: list[str] | None = None) -> int:
+    try:
+        ns = parse_args(argv or sys.argv[1:])
+        if not ns.files:
+            print("[ERROR] no input files", file=sys.stderr)
+            return 2
 
-    p = argparse.ArgumentParser(
-        prog="ratings",
-        description=(
-            "Агрегация рейтингов и формирование отчётов из CSV.\n"
-            "Доступные отчеты:\n"
-            f"{reports_list}"
-        ),
-    )
-    p.add_argument("--files", nargs="+", required=True, help="Пути к CSV-файлам.")
-    p.add_argument(
-        "--report",
-        required=True,
-        choices=list(register.keys()),
-        help="Название отчёта.",
-    )
+        meta = register.get(ns.report)
+        if not meta or "func" not in meta or "headers" not in meta:
+            print(f"[ERROR] report '{ns.report}' is misconfigured", file=sys.stderr)
+            return 2
 
-    return p.parse_args(argv)
+        rows = read_csv_files(ns.files)
+        if not rows:
+            print("[WARN] no data rows after reading CSVs", file=sys.stderr)
 
+        try:
+            final_rows = meta["func"](rows)
+        except KeyboardInterrupt:
+            print("[ERROR] interrupted", file=sys.stderr)
+            return 130
+        except Exception as e:
+            print(f"[ERROR] report '{ns.report}' failed: {e}", file=sys.stderr)
+            return 1
 
-def main(argv: list[str] | None = None):
-    ns = parse_args(argv or sys.argv[1:])
-    report_worker = register.get(ns.report)["func"]
-    report_headers = register.get(ns.report)["headers"]
-    rows = read_csv_files(ns.files)
-    final_rows = report_worker(rows)
-
-    if final_rows:
-        print(tabulate.tabulate(final_rows, headers=report_headers, tablefmt="github"))
+        if final_rows:
+            print(
+                tabulate.tabulate(
+                    final_rows, headers=meta["headers"], tablefmt="github"
+                )
+            )
+        else:
+            print("[INFO] nothing to print", file=sys.stderr)
+        return 0
+    except Exception as e:
+        print(f"[ERROR] unexpected: {e}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
