@@ -20,14 +20,3 @@ def read_csv_files(files: Iterable[str], delimiter: str = ","):
             for row in reader:
                 value.append(row)
     return value
-
-
-def save_csv_files(path: Path, rows: list[tuple], headers: list[str], encoding="utf-8"):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    print(rows, headers)
-    with path.open("w", encoding=encoding, newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(headers)
-        writer.writerows(rows)
-
-    print(f"Файл сохранён: {path.resolve()}")

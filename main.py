@@ -1,9 +1,10 @@
 import argparse
 import sys
 
-from script.build_final_table import build_final_table
-from script.io import read_csv_files
-from script.register_reports import register
+import tabulate
+
+from src.script.io import read_csv_files
+from src.script.register_reports import register
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
@@ -36,7 +37,7 @@ def main(argv: list[str] | None = None):
     final_rows = report_worker(rows)
 
     if final_rows:
-        build_final_table(final_rows, report_headers)
+        print(tabulate.tabulate(final_rows, headers=report_headers, tablefmt="github"))
 
 
 if __name__ == "__main__":

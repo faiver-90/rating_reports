@@ -6,3 +6,5 @@
 ```poetry install```
 2. Запуск
 ```py .\main.py --report average-rating --files file_name_1 file_name_2```
+
+![img.png](img.png)
