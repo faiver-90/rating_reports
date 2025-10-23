@@ -1,15 +1,15 @@
 import logging
 from collections import defaultdict
-
+from typing import List, Dict
 
 logger = logging.getLogger(__name__)
 
-def average_rating(rows):
+def average_rating(rows: List[Dict[str, str]]) -> List[tuple] | None:
     if rows is None:
         return None
 
-    sums = defaultdict(float)
-    counts = defaultdict(int)
+    sums: Dict[str, float] = defaultdict(float)
+    counts: Dict[str, int] = defaultdict(int)
 
 
     for idx, row in enumerate(rows, 1):
@@ -17,10 +17,10 @@ def average_rating(rows):
             brand = row["brand"]
             rating = float(row["rating"])
         except KeyError as e:
-            logger.error(f"[WARN] missing key {e} at row {idx}")
+            logger.error(f"Missing key {e} at row {idx}")
             continue
         except (TypeError, ValueError):
-            logger.error(f"[WARN] bad rating at row {idx}: {row.get('rating')!r}")
+            logger.error(f"Bad rating at row {idx}: {row.get('rating')!r}")
             continue
 
         sums[brand] += rating

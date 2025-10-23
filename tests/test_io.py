@@ -1,4 +1,4 @@
-from src.reports.io import read_csv_files
+from src.reports.io_operation import read_csv_files
 
 CSV_SAMPLE = """name,brand,price,rating
 iphone 15 pro,apple,999,4.9
@@ -21,7 +21,7 @@ def test_read_csv_files_warns_on_missing(tmp_path):
 
 
 def test_read_csv_bad_encoding(tmp_path, caplog):
-    from src.reports.io import read_csv_files
+    from src.reports.io_operation import read_csv_files
 
     p = tmp_path / "bad.csv"
     p.write_bytes(b"\xff\xfe\x00\x00")  # ломаем UTF-8
@@ -32,7 +32,7 @@ def test_read_csv_bad_encoding(tmp_path, caplog):
 
 
 def test_read_csv_bad_format(tmp_path, caplog):
-    from src.reports.io import read_csv_files
+    from src.reports.io_operation import read_csv_files
 
     p = tmp_path / "bad.csv"
     p.write_text('name,brand\nval1\n"unclosed', encoding="utf-8")
@@ -43,7 +43,7 @@ def test_read_csv_bad_format(tmp_path, caplog):
 
 
 def test_read_csv_custom_delimiter(tmp_path):
-    from src.reports.io import read_csv_files
+    from src.reports.io_operation import read_csv_files
 
     p = tmp_path / "s.csv"
     p.write_text("name;brand;rating\nx;apple;5\n", encoding="utf-8")

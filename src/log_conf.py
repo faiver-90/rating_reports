@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 
-def setup_logger():
+def setup_logger() -> None:
     Path("logs").mkdir(parents=True, exist_ok=True)
 
     root = logging.getLogger()

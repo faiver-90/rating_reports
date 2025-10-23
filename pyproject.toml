@@ -49,5 +49,9 @@ line-ending = "auto"
 
 [dependency-groups]
 dev = [
-    "ruff (>=0.14.1,<0.15.0)"
+    "ruff (>=0.14.1,<0.15.0)",
+    "mypy (>=1.18.2,<2.0.0)"
 ]
+
+[tool.mypy]
+ignore_missing_imports = true

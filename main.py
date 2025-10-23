@@ -1,11 +1,11 @@
 import logging
 import sys
 
-import tabulate
+import tabulate  # type: ignore
 
 from src.log_conf import setup_logger
 from src.parse_args import parse_args
-from src.reports.io import read_csv_files
+from src.reports.io_operation import read_csv_files
 from src.reports.register_reports import register
 
 setup_logger()
@@ -17,25 +17,25 @@ def main(argv: list[str] | None = None) -> int:
         ns = parse_args(argv or sys.argv[1:])
 
         if not ns.files:
-            logger.error("[ERROR] no input files")
+            logger.error("No input files")
             return 2
 
         meta = register.get(ns.report)
         if not meta or "func" not in meta or "headers" not in meta:
-            logger.error(f"[ERROR] report '{ns.report}' is misconfigured")
+            logger.error(f"Report '{ns.report}' is misconfigured")
             return 2
 
         rows = read_csv_files(ns.files)
         if not rows:
-            logger.error("[WARN] no data rows after reading CSVs")
+            logger.error("No data rows after reading CSVs")
 
         try:
-            final_rows = meta["func"](rows)
+            final_rows = meta["func"](rows)  # type: ignore
         except KeyboardInterrupt:
-            logger.error("[ERROR] interrupted")
+            logger.error("Interrupted")
             return 130
         except Exception as e:
-            logger.error(f"[ERROR] report '{ns.report}' failed: {e}")
+            logger.error(f"Report '{ns.report}' failed: {e}")
             return 1
 
         if final_rows:
@@ -45,10 +45,10 @@ def main(argv: list[str] | None = None) -> int:
                 )
             )
         else:
-            logger.error("[INFO] nothing to print")
+            logger.error("Nothing to print")
         return 0
     except Exception as e:
-        logger.error(f"[ERROR] unexpected: {e}")
+        logger.error(f"Unexpected: {e}")
         return 1
 
 
