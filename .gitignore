@@ -37,11 +37,6 @@ local.py
 # Временные и пользовательские файлы
 .vscode/
 **/.idea/
-.mailinglist_data/
-mailinglist_data/
-sh_scripts_custom/
-usr/
-reports/
 
 # IDE специфическое
 *.iml

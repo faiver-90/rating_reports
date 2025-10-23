@@ -1,16 +1,15 @@
 import logging
 from collections import defaultdict
-from typing import List, Dict
 
 logger = logging.getLogger(__name__)
 
-def average_rating(rows: List[Dict[str, str]]) -> List[tuple] | None:
+
+def average_rating(rows: list[dict[str, str]]) -> list[tuple] | None:
     if rows is None:
         return None
 
-    sums: Dict[str, float] = defaultdict(float)
-    counts: Dict[str, int] = defaultdict(int)
-
+    sums: dict[str, float] = defaultdict(float)
+    counts: dict[str, int] = defaultdict(int)
 
     for idx, row in enumerate(rows, 1):
         try:
